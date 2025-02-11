@@ -1,7 +1,7 @@
 import { streamGemini } from './gemini-api.js';
 
 let form = document.querySelector('form');
-let promptInput = document.querySelector('input[name="prompt"]');
+let promptInput = "List the ingredients of the sunscreen in the image."
 let output = document.querySelector('.output');
 
 form.onsubmit = async (ev) => {
@@ -9,19 +9,21 @@ form.onsubmit = async (ev) => {
   output.textContent = 'Generating...';
 
   try {
-    // Load the image as a base64 string
-    let imageUrl = form.elements.namedItem('chosen-image').value;
-    let imageBase64 = await fetch(imageUrl)
-      .then(r => r.arrayBuffer())
-      .then(a => base64js.fromByteArray(new Uint8Array(a)));
+    // Load the image as a base64 string  
+    let file = form.elements.namedItem('image').files[0];
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    await new Promise((resolve) => (reader.onload = resolve));
+    let image = reader.result.split(',')[1];
+
 
     // Assemble the prompt by combining the text with the chosen image
     let contents = [
       {
         role: 'user',
         parts: [
-          { inline_data: { mime_type: 'image/jpeg', data: imageBase64, } },
-          { text: promptInput.value }
+          { inline_data: { mime_type: 'image/jpeg', data: image, } },
+          { text: promptInput }
         ]
       }
     ];

@@ -8,7 +8,7 @@ from flask import Flask, jsonify, request, send_file, send_from_directory
 # Get your Gemini API key by:
 # - Selecting "Add Gemini API" in the "Project IDX" panel in the sidebar
 # - Or by visiting https://g.co/ai/idxGetGeminiKey
-API_KEY = 'TODO'
+API_KEY = 'AIzaSyB8jN2ky46yVpwYp6wXM4UNEOFJdakQhQY'
 
 genai.configure(api_key=API_KEY)
 
@@ -23,12 +23,6 @@ def index():
 @app.route("/api/generate", methods=["POST"])
 def generate_api():
     if request.method == "POST":
-        if API_KEY == 'TODO':
-            return jsonify({ "error": '''
-                To get started, get an API key at
-                https://g.co/ai/idxGetGeminiKey and enter it in
-                main.py
-                '''.replace('\n', '') })
         try:
             req_body = request.get_json()
             content = req_body.get("contents")
